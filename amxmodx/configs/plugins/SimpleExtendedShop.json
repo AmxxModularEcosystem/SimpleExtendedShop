@@ -1,0 +1,12 @@
+[
+    {
+        "Title": "Хилка", // Отображаемое название валюты
+        "Currency": "GameMoney", // Название валюты из ModularWallet
+        "Price": 222, // Цена пункта в указанной валюте
+        "Items": [ // Массив предметов из ItemsController
+            {
+                "Type": "HealthNade"
+            }
+        ]
+    }
+]
