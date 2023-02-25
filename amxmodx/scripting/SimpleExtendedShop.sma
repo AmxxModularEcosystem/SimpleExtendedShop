@@ -71,7 +71,7 @@ public plugin_precache() {
 
         menu_additem(
             iMenu,
-            fmt("%-32 %s", ShopItem[ShopItem_Title], MWallet_Currency_Fmt(ShopItem[ShopItem_Currency], ShopItem[ShopItem_Price])),
+            fmt("%-32s \y%s", ShopItem[ShopItem_Title], MWallet_Currency_Fmt(ShopItem[ShopItem_Currency], ShopItem[ShopItem_Price])),
             fmt("shop %d", i)
         );
     }
