@@ -33,16 +33,19 @@ public plugin_precache() {
     }
 
     register_clcmd("shop", "@Cmd_Shop");
-    register_clcmd("say /shop", "@Cmd_ShopMenu");
-    register_clcmd("say_team /shop", "@Cmd_ShopMenu");
+    register_clcmd("say /shop", "@Cmd_Shop");
+    register_clcmd("say_team /shop", "@Cmd_Shop");
 }
 
 @Cmd_Shop(const UserId) {
-    if (read_argc() < 2) {
-        return @Cmd_ShopMenu(UserId);
+    if (ReadArgcEx(true) < 1) {
+        ShowShopMenu(UserId);
+        return PLUGIN_HANDLED;
     }
 
-    new iItemIndex = read_argv_int(1);
+    new iNullArg = ReadNullArg(true);
+
+    new iItemIndex = read_argv_int(iNullArg + 1);
     if (iItemIndex < 0 || iItemIndex >= ArraySize(g_aShopItems)) {
         client_print(UserId, print_console, "Invalid shop item index (%d).", iItemIndex);
         return PLUGIN_HANDLED;
@@ -62,7 +65,7 @@ public plugin_precache() {
     return PLUGIN_HANDLED;
 }
 
-@Cmd_ShopMenu(const UserId) {
+ShowShopMenu(const UserId) {
     new iMenu = menu_create("Магазин", "@MenuHandler_Command");
 
     for (new i = 0, ii = ArraySize(g_aShopItems); i < ii; i++) {
@@ -77,8 +80,6 @@ public plugin_precache() {
     }
 
     menu_display(UserId, iMenu);
-
-    return PLUGIN_HANDLED;
 }
 
 @MenuHandler_Command(const UserId, const MenuId, const ItemId) {
@@ -162,4 +163,32 @@ GetConfigsPath() {
         get_localinfo("amxx_configsdir", __amxx_configsdir, charsmax(__amxx_configsdir));
     }
     return __amxx_configsdir;
+}
+
+ReadArgcEx(const bool:bIgnoreSay = false) {
+    new iArgc = read_argc() - 1;
+
+    if (bIgnoreSay) {
+        new sSay[4];
+        read_argv(0, sSay, charsmax(sSay));
+        if (equali(sSay, "say")) {
+            --iArgc;
+        }
+    }
+
+    return iArgc;
+}
+
+ReadNullArg(const bool:bIgnoreSay = false) {
+    new iNullArg = 0;
+
+    if (bIgnoreSay) {
+        new sSay[4];
+        read_argv(0, sSay, charsmax(sSay));
+        if (equali(sSay, "say")) {
+            iNullArg++;
+        }
+    }
+
+    return iNullArg;
 }
